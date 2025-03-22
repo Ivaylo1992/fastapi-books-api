@@ -117,11 +117,11 @@ async def get_all_books():
 
 @app.post('/books', status_code=status.HTTP_201_CREATED)
 async def create_book(book_data:BookModel) -> dict:
-     new_book = book_data.model_dump()
+    new_book = book_data.model_dump()
 
-     books.append(new_book)
+    books.append(new_book)
 
-     return new_book
+    return new_book
 
 @app.get('/book/{book_id}')
 async def detail_book(book_id: int) -> dict:
@@ -130,8 +130,8 @@ async def detail_book(book_id: int) -> dict:
             return book
 
     raise HTTPException(
-         status_code=status.HTTP_404_NOT_FOUND,
-         detail='Book not found'
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail='Book not found'
     )
 
 
@@ -148,6 +148,19 @@ async def update_book(book_id: int, book_update_data: BookUpdateModel) -> dict:
             return book
     
     raise HTTPException(
-         status_code=status.HTTP_404_NOT_FOUND,
-         detail='Book not found'
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail='Book not found'
+    )
+
+
+@app.delete('/book/{book_id}', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_book(book_id: int):
+    for book in books:
+        if book['id'] == book_id:
+            books.remove(book)
+            return {}
+    
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail='Book not found'
     )
